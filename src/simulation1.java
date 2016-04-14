@@ -1,9 +1,5 @@
-import java.io.FilePermission;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
-import java.sql.Array;
-import java.sql.ResultSet;
 import java.util.*;
 
 import com.opencsv.*;
@@ -33,8 +29,8 @@ public class simulation1 {
 
     public static void runSimulation(int numOfSample , double arrivalRate , double linkCapacity, double meanPacketLength ,long memoryCapacity)  {
 
-        ArrayList<Double> timeLine = q1.timeSeq(arrivalRate, numOfSample);
-        ArrayList<Double> packetSeq = q1.packetLengthSeq( 1 / meanPacketLength, numOfSample);
+        ArrayList<Double> timeLine = ExponentialGenerator.timeSeq(arrivalRate, numOfSample);
+        ArrayList<Double> packetSeq = ExponentialGenerator.packetLengthSeq( 1 / meanPacketLength, numOfSample);
 
         queueSystem aSystem = new queueSystem(timeLine, packetSeq, linkCapacity, memoryCapacity);
         ArrayList<packet> thePacketLog = aSystem.getPacketLog();
