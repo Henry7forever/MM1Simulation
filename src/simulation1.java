@@ -7,21 +7,23 @@ import com.opencsv.*;
 /**
  * Created by 1707lab on 2016/4/11.
  */
-public class simulation1 {
+public class Simulation1 {
     public static void main(String[] args) {
 
         int numOfSample;
 
-
+        //simulation arguments
         numOfSample = 10000;
         long []memoryCapacity = {10000000 ,80000, 160000, 240000};
         double linkCapacity = 1E8;
         double meanPacketLength = 8E3 ;
         double []arrivalRate = {1000,3000,5000,7000,9000,11000};
 
+
+        //Run
         for (long memCapacity : memoryCapacity) {
             for (double arrRate : arrivalRate) {
-                  simulation1.runSimulation(numOfSample, arrRate, linkCapacity, meanPacketLength, memCapacity);
+                  Simulation1.runSimulation(numOfSample, arrRate, linkCapacity, meanPacketLength, memCapacity);
             }
         }
     }
@@ -29,37 +31,44 @@ public class simulation1 {
 
     public static void runSimulation(int numOfSample , double arrivalRate , double linkCapacity, double meanPacketLength ,long memoryCapacity)  {
 
+
+        //generate arrival timelines and packets length
         ArrayList<Double> timeLine = ExponentialGenerator.timeSeq(arrivalRate, numOfSample);
         ArrayList<Double> packetSeq = ExponentialGenerator.packetLengthSeq( 1 / meanPacketLength, numOfSample);
 
-        queueSystem aSystem = new queueSystem(timeLine, packetSeq, linkCapacity, memoryCapacity);
-        ArrayList<packet> thePacketLog = aSystem.getPacketLog();
 
-        //CSVWriter  csvPen = new CSVWriter(new Writer() , ",");
+        //create a queueing system instance
+        QueueSystem aSystem = new QueueSystem(timeLine, packetSeq, linkCapacity, memoryCapacity);
+
+        //packets log file
+        ArrayList<Packet> thePacketLog = aSystem.getPacketLog();
+
 
         /*---------detail logger file for queueing system---------------*/
         /*
-        for (packet x : thePacketLog){
+        for (Packet x : thePacketLog){
             System.out.println("ARR: "+x.getArrivalTime()+"\tDEP: "+x.getDepartureTime()+"\tDWELL: "+x.getDwellTime());
         }
         */
 
+
+        //get the information we need
         double avgDwellTime = aSystem.averageDwellTime();
         double avgQueueingLength = aSystem.avgQlength();
         double dropRate = aSystem.blockingRate();
         long drops = aSystem.getNumOfDrops();
 
+
+
         System.out.println("memory capacity: " + memoryCapacity);
         System.out.println("Average Dwelling Time for arrivalRate " + (long)arrivalRate + ":\t" + avgDwellTime + " seconds\tAvgQLength: " + avgQueueingLength);
-        //System.out.println("memory capacity: " +aSystem.getMemoryCapacity());
         System.out.println("blocking rate: "+dropRate+"\t" + "\tdrops: "+drops);
 
         ArrayList<String> dataInput = new ArrayList<>();
 
         String[] metaData = {"memory capacity","arrival rate","avg dwelling time","avg queue length","drops","drop rate"};
 
-
-
+        //a line of buffering data to be written in .csv file
         dataInput.add(Long.toString(memoryCapacity));
         dataInput.add(Double.toString(arrivalRate));
         dataInput.add(Double.toString(avgDwellTime) );
@@ -67,10 +76,7 @@ public class simulation1 {
         dataInput.add(Double.toString(drops));
         dataInput.add(Double.toString(dropRate));
 
-
         String[] data = dataInput.toArray(new String[dataInput.size()]);
-
-
 
         String path = "dataCollector.csv";
         CSVWriter writer = null;
@@ -80,10 +86,9 @@ public class simulation1 {
             e.printStackTrace();
         }
 
-        //for (int i =0;i < data.length;i++) {
+        //write the buffer data into file
             assert writer != null;
             writer.writeNext(data);
-        //}
 
         try {
             writer.close();

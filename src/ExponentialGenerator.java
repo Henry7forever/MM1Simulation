@@ -8,6 +8,7 @@ public class ExponentialGenerator {
         //  1/lambda is mean value of the samples
         ArrayList<Double> seq = new ArrayList<Double>();
 
+        //ramdomize generate n numbers follow exponential distribution
         for (int i = 0; i < numOfsample; i++) {
             double theSampleValue = -1 * ((double) Math.log(Math.random())) / lambda;
             seq.add(theSampleValue);
@@ -15,15 +16,21 @@ public class ExponentialGenerator {
         return seq;
     }
 
+
+    //for generate packets length
     public static  ArrayList<Double> packetLengthSeq(double lambda, int numOfsample)
     {
         return ExponentialGenerator.expoGenerator(lambda , numOfsample);
     }
 
+
+    //for generate inter arrival time list
     public static  ArrayList<Double> timeSeq(double lambda, int numOfsample)
     {
         ArrayList<Double> interTimeSeq = ExponentialGenerator.expoGenerator(lambda , numOfsample);
         ArrayList<Double> seq = new ArrayList<Double>();
+
+        //transform to arrival timeline
         for (int i = 0; i < interTimeSeq.size(); i++) {
             if (i == 0)
                 seq.add(interTimeSeq.get(0));
@@ -32,32 +39,6 @@ public class ExponentialGenerator {
         }
         return seq;
     }
-
-
-
-
-   // public static void main(String[] args) {
-
-  /*
-        int numOfSample;
-        numOfSample = 80;
-        ArrayList<Double> interTimeSeq = ExponentialGenerator.expoGenerator(8000, numOfSample);
-        ArrayList<Double> packetLengthSeq = ExponentialGenerator.expoGenerator((double) 1 / 8000, numOfSample);
-        ArrayList<Double> timeSeq = new ArrayList<Double>();
-
-        for (int i = 0; i < interTimeSeq.size(); i++) {
-            if (i == 0)
-                timeSeq.add(interTimeSeq.get(0));
-            else
-                timeSeq.add(timeSeq.get(i - 1) + interTimeSeq.get(i));
-        }
-
-*/
-
-
-
-
-    //}
 }
 
 

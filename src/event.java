@@ -1,13 +1,13 @@
 /**
  * Created by Andy on 2016/4/13.
  */
-public class event {
+public class Event {
     private String eventType ;
     private double occurTime ;
     private double durTime;
     private  long queueLength;
 
-    public event(String eventType, double occurTime) {
+    public Event(String eventType, double occurTime) {
         this.eventType = eventType;
         this.occurTime = occurTime;
         this.durTime = 0;

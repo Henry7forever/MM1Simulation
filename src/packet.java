@@ -3,14 +3,14 @@ import java.util.ArrayList;
 /**
  * Created by 1707lab on 2016/4/11.
  */
-public class packet {
+public class Packet {
     private double arrivalTime;
     private double departureTime;
     private double dwellTime;
     private double packetLength;
 
 
-    public packet(double arrivalTime, double departureTime, double dwellTime ,double packetLength) {
+    public Packet(double arrivalTime, double departureTime, double dwellTime , double packetLength) {
         this.arrivalTime = arrivalTime;
         this.departureTime = departureTime;
         this.dwellTime = dwellTime;
